@@ -8,6 +8,7 @@ function creatingObject(name, minCustomer, maxCustomer, avgCookieSale) {
     minCustomer: minCustomer,
     maxCustomer: maxCustomer,
     avgCookieSale: avgCookieSale,
+    customersPerHour: 'customersPerHourRandom'
   };
   return toReturn;
 }
@@ -20,7 +21,7 @@ var locationsInfo = [
 ['Alki', 2 ,16 , 4.6],
 ];
 
-var locations = []
+var locations = [];
 
 for (var i = 0; i < locationsInfo.length; i += 1) {
   var toAdd = creatingObject(
@@ -32,4 +33,4 @@ for (var i = 0; i < locationsInfo.length; i += 1) {
   locations.push('var store' + i + ' = ' + JSON.stringify(toAdd).split('"').join('\'') + ';');
 }
 
-console.log(locations.join('\n'));
+console.log(locations.join('\n').split('\'customersPerHourRandom\'').join('customersPerHourRandom'));
