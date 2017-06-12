@@ -28,10 +28,27 @@ for (var i = 0; i < stores.length; i += 1){
   store.totalCookiesSold = totalCookiesSold;
 }
 
-// This expects an erray of elements with two object.
-// |Int|String description|
-function dualArrayToList(array) {
-  for (var each = 0; each < array.length; each += 1){
+var parentMyElement = document.getElementById('mylistsOfStats');
+console.log(document);
+console.log(parentMyElement);
+
+for (var each = 0; each < stores.length; each += 1){
+  var eachStore = stores[each];
+  var article = document.createElement('article');
+  parentMyElement.appendChild(article);
+  var title = document.createElement('h2');
+  title.textContent = eachStore.name;
+  article.appendChild(title);
+  var ul = document.createElement('ul');
+  article.appendChild(ul);
+
+  for (var eachList = 0; eachList < eachStore.locationsStats.length; eachList += 1){
+    var li = document.createElement('li');
+    li.textContent = eachStore.locationsStats[eachList][1];
+    ul.appendChild(li);
   }
+  var liLast = document.createElement('li');
+  liLast.textContent = 'Total: ' + eachStore.totalCookiesSold + ' cookies';
+  ul.appendChild(liLast);
 
 }
