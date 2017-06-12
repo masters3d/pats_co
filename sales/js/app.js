@@ -1,6 +1,8 @@
 'use strict';
 
-function creatingObject(name, minCustomer, maxCustomer, avgCookieSale ) {
+// Personal Stretch goal Object Literal generator
+
+function creatingObject(name, minCustomer, maxCustomer, avgCookieSale) {
   var toReturn = {
     name: name,
     minCustomer: minCustomer,
@@ -18,7 +20,7 @@ var locationsInfo = [
 ['Alki', 2 ,16 , 4.6],
 ];
 
-var locations = [];
+var locations = []
 
 for (var i = 0; i < locationsInfo.length; i += 1) {
   var toAdd = creatingObject(
@@ -27,7 +29,7 @@ for (var i = 0; i < locationsInfo.length; i += 1) {
       locationsInfo[i][2],
       locationsInfo[i][3]
     );
-  console.log(toAdd);
-  locations.push(toAdd);
+  locations.push('var store' + i + ' = ' + JSON.stringify(toAdd).split('"').join('\'') + ';');
 }
-console.log(locations);
+
+console.log(locations.join('\n'));
