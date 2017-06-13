@@ -51,12 +51,23 @@ for (var i = 0; i < stores.length; i += 1){
   store.totalCookiesSold = totalCookiesSold;
 }
 
+function creatingElementNameWithContent(node, content){
+  var li = document.createElement(node);
+  li.textContent = content;
+  return li;
+}
+
 Store.prototype.renderStats = function(parentElement){
+  // appends Name
+  parentElement.appendChild(creatingElementNameWithContent('li', this.name));
+  // appends All Hours
   for(var statKey in this.locationsStats){
-    var li = document.createElement('li');
-    li.textContent = this.locationsStats[statKey];
-    parentElement.appendChild(li);
+    parentElement.appendChild(creatingElementNameWithContent(
+        'li', this.locationsStats[statKey]
+      ));
   }
+  // appends the total sold per store
+  parentElement.appendChild(creatingElementNameWithContent('li', this.totalCookiesSold));
 };
 
 
