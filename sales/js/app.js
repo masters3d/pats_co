@@ -24,14 +24,14 @@ Store.prototype.customersPerHour = function() {
 var stores = [];
 
 for(each in locationsInfo){
-  var eachStore = new Store(
-          locationsInfo[each][0],
-          locationsInfo[each][1],
-          locationsInfo[each][2],
-          locationsInfo[each][3]
-        );
-  console.log(eachStore);
-  stores.push(eachStore);
+  stores.push(
+    new Store(
+            locationsInfo[each][0],
+            locationsInfo[each][1],
+            locationsInfo[each][2],
+            locationsInfo[each][3]
+            )
+  );
 }
 
 var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
