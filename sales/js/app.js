@@ -22,7 +22,7 @@ Store.prototype.customersPerHour = function() {
 };
 
 var stores = [];
-
+var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
 for(var ea in locationsInfo){
   stores.push(
     new Store(
@@ -33,8 +33,18 @@ for(var ea in locationsInfo){
             )
   );
 }
+function renderTableHeader(parent){
+  var tr = document.createElement('tr');
 
-var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
+
+  tr.appendChild(creatingElementNameWithContent('th', 'Store Name'));
+  for (var each in hours) {
+    tr.appendChild(creatingElementNameWithContent('th', hours[each]));
+  }
+  tr.appendChild(creatingElementNameWithContent('th', 'Daily Location Total'));
+
+  parent.appendChild(tr);
+}
 
 for (var i = 0; i < stores.length; i += 1){
   var locationsStats = [];
@@ -71,6 +81,10 @@ Store.prototype.renderStats = function(parentElement){
 };
 
 var parentMyElement = document.getElementById('mylistsOfStats');
+var table = document.createElement('table');
+renderTableHeader(table);
+parentMyElement.appendChild(table);
+
 
 for (var each = 0; each < stores.length; each += 1){
   var eachStore = stores[each];
