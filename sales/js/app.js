@@ -23,13 +23,13 @@ Store.prototype.customersPerHour = function() {
 
 var stores = [];
 
-for(each in locationsInfo){
+for(var ea in locationsInfo){
   stores.push(
     new Store(
-            locationsInfo[each][0],
-            locationsInfo[each][1],
-            locationsInfo[each][2],
-            locationsInfo[each][3]
+            locationsInfo[ea][0],
+            locationsInfo[ea][1],
+            locationsInfo[ea][2],
+            locationsInfo[ea][3]
             )
   );
 }
@@ -51,6 +51,15 @@ for (var i = 0; i < stores.length; i += 1){
   store.totalCookiesSold = totalCookiesSold;
 }
 
+Store.prototype.renderStats = function(parentElement){
+  for(var statKey in this.locationsStats){
+    var li = document.createElement('li');
+    li.textContent = this.locationsStats[statKey];
+    parentElement.appendChild(li);
+  }
+};
+
+
 var parentMyElement = document.getElementById('mylistsOfStats');
 console.log(document);
 console.log(parentMyElement);
@@ -64,12 +73,7 @@ for (var each = 0; each < stores.length; each += 1){
   article.appendChild(title);
   var ul = document.createElement('ul');
   article.appendChild(ul);
-
-  for (var eachList = 0; eachList < eachStore.locationsStats.length; eachList += 1){
-    var li = document.createElement('li');
-    li.textContent = eachStore.locationsStats[eachList];
-    ul.appendChild(li);
-  }
+  eachStore.renderStats(ul);
   var liLast = document.createElement('li');
   liLast.textContent = 'Total: ' + eachStore.totalCookiesSold + ' cookies';
   ul.appendChild(liLast);
