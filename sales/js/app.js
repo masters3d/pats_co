@@ -70,23 +70,15 @@ Store.prototype.renderStats = function(parentElement){
   parentElement.appendChild(creatingElementNameWithContent('li', this.totalCookiesSold));
 };
 
-
 var parentMyElement = document.getElementById('mylistsOfStats');
-console.log(document);
-console.log(parentMyElement);
 
 for (var each = 0; each < stores.length; each += 1){
   var eachStore = stores[each];
   var article = document.createElement('article');
   parentMyElement.appendChild(article);
-  var title = document.createElement('h2');
-  title.textContent = eachStore.name;
-  article.appendChild(title);
+  //TODO: HEADER
   var ul = document.createElement('ul');
   article.appendChild(ul);
   eachStore.renderStats(ul);
-  var liLast = document.createElement('li');
-  liLast.textContent = 'Total: ' + eachStore.totalCookiesSold + ' cookies';
-  ul.appendChild(liLast);
-
+  //TODO: FOOTER
 }
