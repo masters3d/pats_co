@@ -71,27 +71,26 @@ function renderTableFooter(parent){
   parent.appendChild(tfoot);
 }
 
-
-
-for (var i = 0; i < stores.length; i += 1){
-  var locationsStats = [];
-  var store = stores[i];
-  var totalCookiesSold = 0;
-  for (var j = 0; j < hours.length; j += 1){
-    var flooredNumber = Math.floor(store.avgCookieSale * store.customersPerHour());
-    // | Int Value of average sold | String description
-    locationsStats.push(flooredNumber);
-    totalCookiesSold += flooredNumber;
+function processLocationStats(){
+  for (var i = 0; i < stores.length; i += 1){
+    var locationsStats = [];
+    var store = stores[i];
+    var totalCookiesSold = 0;
+    for (var j = 0; j < hours.length; j += 1){
+      var flooredNumber = Math.floor(store.avgCookieSale * store.customersPerHour());
+      locationsStats.push(flooredNumber);
+      totalCookiesSold += flooredNumber;
+    }
+    console.log(locationsStats);
+    store.locationsStats = locationsStats;
+    store.totalCookiesSold = totalCookiesSold;
   }
-  console.log(locationsStats);
-  store.locationsStats = locationsStats;
-  store.totalCookiesSold = totalCookiesSold;
 }
 
 function creatingElementNameWithContent(node, content){
-  var li = document.createElement(node);
-  li.textContent = content;
-  return li;
+  var nodeElement = document.createElement(node);
+  nodeElement.textContent = content;
+  return nodeElement;
 }
 
 Store.prototype.renderStats = function(parentElement){
@@ -107,15 +106,21 @@ Store.prototype.renderStats = function(parentElement){
   parentElement.appendChild(creatingElementNameWithContent('td', this.totalCookiesSold));
 };
 
+function renderTableBody(parent){
+  var tbody = document.createElement('tbody');
+  parent.appendChild(tbody);
+  for (var each = 0; each < stores.length; each += 1){
+    var eachStore = stores[each];
+    var row = document.createElement('tr');
+    tbody.appendChild(row);
+    eachStore.renderStats(row);
+  }
+}
+
+processLocationStats();
 var parentMyElement = document.getElementById('mylistsOfStats');
 var table = document.createElement('table');
-renderTableHeader(table);
 parentMyElement.appendChild(table);
-
-for (var each = 0; each < stores.length; each += 1){
-  var eachStore = stores[each];
-  var row = document.createElement('tr');
-  table.appendChild(row);
-  eachStore.renderStats(row);
-}
+renderTableHeader(table);
+renderTableBody(table);
 renderTableFooter(table);
