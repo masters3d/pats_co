@@ -1,12 +1,12 @@
 'use strict';
 
-var locationsInfo = [];
-// ['1st and Pike' , 23 , 65 ,6.3],
+var locationsInfo = [
+['1st and Pike' , 23 , 65 ,6.3],
 // ['SeaTac Airport', 3 ,24 , 1.2],
 // ['Seattle Center', 11, 38 , 3.7],
 // ['Capitol Hill', 20,38 , 2.3],
 // ['Alki', 2 ,16 , 4.6],
-// ];
+];
 
 function Store (name, minCustomer, maxCustomer, avgCookieSale) {
   this.name = name;
@@ -20,6 +20,20 @@ Store.prototype.customersPerHour = function() {
 };
 
 var stores = [];
+
+stores.containsStore = function(store) {
+  for (var eaIndex in this ) {
+    if (this[eaIndex].name === store.name &&
+    this[eaIndex].minCustomer === store.minCustomer &&
+    this[eaIndex].maxCustomer === store.maxCustomer &&
+    this[eaIndex].avgCookieSale === store.avgCookieSale) {
+      return true;
+    }
+  }
+  return false;
+  console.log(this);
+};
+
 var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
 for(var ea in locationsInfo){
   stores.push(
@@ -31,6 +45,7 @@ for(var ea in locationsInfo){
             )
   );
 }
+
 function renderTableHeader(parent, singleArray, caption){
   parent.appendChild(creatingElementNameWithContent('caption', caption));
 
@@ -170,4 +185,29 @@ function renderTables(){
   renderTableBody(table2, stores, 'renderTossersAsRow');
 }
 
+function unloadElementWithId(elementId){
+  var tableToUnload = document.getElementById(elementId);
+  tableToUnload.textContent = '';
+}
+
 renderTables();
+function newStoreHandler (event) {
+  event.preventDefault();
+  var val1 = event.target.name.value;
+  var val2 = parseFloat(event.target.minCustomer.value);
+  var val3 = parseFloat(event.target.maxCustomer.value);
+  var val4 = parseFloat(event.target.avgCookieSale.value);
+  var storeToAdd = new Store(val1, val2, val3, val4);
+
+  if (stores.containsStore(storeToAdd)){
+    // Present Error
+    alert('This store has already been included');
+    return;
+  }
+  stores.push(storeToAdd);
+  unloadElementWithId('mylistsOfStats');
+  renderTables();
+}
+
+var newStore = document.getElementById('newStoreForm');
+newStore.addEventListener('submit', newStoreHandler);

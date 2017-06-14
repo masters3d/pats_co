@@ -17,11 +17,11 @@
           <label>Name</label>
           <input name="name" type="text"/>
           <label>Min Customers</label>
-          <input name="minCustomer" type="text"/>
+          <input name="minCustomer" type="number" min="0"/>
           <label>Max Customers</label>
-          <input name="maxCustomer" type="text"/>
+          <input name="maxCustomer" type="number" min="0"/>
           <label>Average Cookie Sale</label>
-          <input name="avgCookieSale" type="text"/>
+          <input name="avgCookieSale" type="number" step="0.1" min="0"/>
         </fieldset>
         <button type="submit">Add New Store</button>
       </form>
