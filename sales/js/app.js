@@ -43,10 +43,10 @@ function renderTableHeader(parent, singleArray){
   parent.appendChild(thead);
 }
 
-function providingHeaders(){
+function providingHeaders(first, last){
   var headers = hours.slice();
-  headers.push('Daily Location Total');
-  headers.unshift('Store Name');
+  headers.push(first);
+  headers.unshift(last);
   return headers;
 }
 
@@ -93,6 +93,22 @@ function processLocationStats(){
   }
 }
 
+function processTossersNeed(){
+  for (var i = 0; i < stores.length; i += 1){
+    var tossersNeed = [];
+    var store = stores[i];
+    var totalTossersNeeded = 0;
+    for (var j = 0; j < store.locationsStats.length; j += 1){
+      var flooredNumber = Math.ceil(store.locationsStats[j] / 20);
+      flooredNumber = flooredNumber >= 2 ? flooredNumber : 2 ;
+      tossersNeed.push(flooredNumber);
+      totalTossersNeeded += flooredNumber;
+    }
+    store.tossersNeed = tossersNeed;
+    store.totalTossersNeeded = totalTossersNeeded;
+  }
+}
+
 function creatingElementNameWithContent(node, content){
   var nodeElement = document.createElement(node);
   nodeElement.textContent = content;
@@ -114,6 +130,14 @@ Store.prototype.renderStatsAsRow = function(){
   return stats;
 };
 
+Store.prototype.renderTossersAsRow = function(){
+  var stats = this.tossersNeed.slice();
+  stats.unshift(this.name);
+  stats.push(this.totalTossersNeeded);
+  return stats;
+};
+
+
 function renderTableBody(parent, bodyElements, subArrayName){
   var tbody = document.createElement('tbody');
   parent.appendChild(tbody);
@@ -125,11 +149,22 @@ function renderTableBody(parent, bodyElements, subArrayName){
   }
 }
 
+// Cookies table
 processLocationStats();
 var parentMyElement = document.getElementById('mylistsOfStats');
 var table = document.createElement('table');
 parentMyElement.appendChild(table);
 
-renderTableHeader(table, providingHeaders());
+renderTableHeader(table, providingHeaders('Daily Location Total','Store Name'));
 renderTableBody(table, stores, 'renderStatsAsRow');
 renderTableFooter(table, providingSumRow());
+
+// Tossers Table
+
+processTossersNeed();
+var table2 = document.createElement('table');
+parentMyElement.appendChild(table2);
+renderTableHeader(table2, providingHeaders('Total Tosser Hours','Store Name'));
+renderTableBody(table2, stores, 'renderTossersAsRow');
+
+//
