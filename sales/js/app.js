@@ -36,7 +36,6 @@ for(var ea in locationsInfo){
 function renderTableHeader(parent){
   var tr = document.createElement('tr');
 
-
   tr.appendChild(creatingElementNameWithContent('th', 'Store Name'));
   for (var each in hours) {
     tr.appendChild(creatingElementNameWithContent('th', hours[each]));
@@ -69,15 +68,15 @@ function creatingElementNameWithContent(node, content){
 
 Store.prototype.renderStats = function(parentElement){
   // appends Name
-  parentElement.appendChild(creatingElementNameWithContent('li', this.name));
+  parentElement.appendChild(creatingElementNameWithContent('td', this.name));
   // appends All Hours
   for(var statKey in this.locationsStats){
     parentElement.appendChild(creatingElementNameWithContent(
-        'li', this.locationsStats[statKey]
+        'td', this.locationsStats[statKey]
       ));
   }
   // appends the total sold per store
-  parentElement.appendChild(creatingElementNameWithContent('li', this.totalCookiesSold));
+  parentElement.appendChild(creatingElementNameWithContent('td', this.totalCookiesSold));
 };
 
 var parentMyElement = document.getElementById('mylistsOfStats');
@@ -85,14 +84,10 @@ var table = document.createElement('table');
 renderTableHeader(table);
 parentMyElement.appendChild(table);
 
-
 for (var each = 0; each < stores.length; each += 1){
   var eachStore = stores[each];
-  var article = document.createElement('article');
-  parentMyElement.appendChild(article);
-  //TODO: HEADER
-  var ul = document.createElement('ul');
-  article.appendChild(ul);
-  eachStore.renderStats(ul);
+  var row = document.createElement('tr');
+  table.appendChild(row);
+  eachStore.renderStats(row);
   //TODO: FOOTER
 }
