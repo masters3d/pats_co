@@ -69,15 +69,18 @@ function providingSumRow() {
   var totals = [];
   var mainTotal = 0;
   for (var eachF in stores ) {
-    mainTotal += (stores[eachF]).totalCookiesSold;
+    mainTotal += (stores[eachF]).totalCookiesSold ? (stores[eachF]).totalCookiesSold : 0;
     var statsForStore = (stores[eachF]).locationsStats;
     for (var each in statsForStore) {
       totals[each] = totals[each] ? totals[each] : 0;
       totals[each] += statsForStore[each];
     }
   }
+  console.log('This is the total: ' + mainTotal);
+
   totals.unshift('Total Sum');;
   totals.push(mainTotal);
+  console.log('This is the total: ' + mainTotal);
   return totals;
 }
 
