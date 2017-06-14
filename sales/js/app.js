@@ -23,10 +23,7 @@ var stores = [];
 
 stores.containsStore = function(store) {
   for (var eaIndex in this ) {
-    if (this[eaIndex].name === store.name &&
-    this[eaIndex].minCustomer === store.minCustomer &&
-    this[eaIndex].maxCustomer === store.maxCustomer &&
-    this[eaIndex].avgCookieSale === store.avgCookieSale) {
+    if (this[eaIndex].name === store.name) {
       return true;
     }
   }
@@ -65,22 +62,20 @@ function providingHeaders(first, last){
   return headers;
 }
 
-function providingSumRow() {
+function providingSumRow(nameOfArrayOnStore, nameOfSubTotalOnStore, titleOfTotalSumIn) {
+  var titleOfTotalSum = titleOfTotalSumIn ? titleOfTotalSumIn : 'Total Sum';
   var totals = [];
   var mainTotal = 0;
   for (var eachF in stores ) {
-    mainTotal += (stores[eachF]).totalCookiesSold ? (stores[eachF]).totalCookiesSold : 0;
-    var statsForStore = (stores[eachF]).locationsStats;
+    mainTotal += (stores[eachF])[nameOfSubTotalOnStore] ? (stores[eachF])[nameOfSubTotalOnStore] : 0;
+    var statsForStore = (stores[eachF])[nameOfArrayOnStore];
     for (var each in statsForStore) {
       totals[each] = totals[each] ? totals[each] : 0;
       totals[each] += statsForStore[each];
     }
   }
-  console.log('This is the total: ' + mainTotal);
-
-  totals.unshift('Total Sum');;
+  totals.unshift(titleOfTotalSum);
   totals.push(mainTotal);
-  console.log('This is the total: ' + mainTotal);
   return totals;
 }
 
@@ -155,7 +150,6 @@ Store.prototype.renderTossersAsRow = function(){
   return stats;
 };
 
-
 function renderTableBody(parent, bodyElements, subArrayName){
   var tbody = document.createElement('tbody');
   parent.appendChild(tbody);
@@ -175,17 +169,20 @@ function renderTables(){
   parentMyElement.appendChild(table);
 
   renderTableHeader(table,
-    providingHeaders('Daily Location Total','Store Name'), 'Cookie Sales');
+    providingHeaders('Daily Location Total','Store Name'), 'Cookie Sales'
+  );
   renderTableBody(table, stores, 'renderStatsAsRow');
-  renderTableFooter(table, providingSumRow());
+  renderTableFooter(table, providingSumRow('locationsStats', 'totalCookiesSold'));
 
   // Tossers Table
   processTossersNeed();
   var table2 = document.createElement('table');
   parentMyElement.appendChild(table2);
   renderTableHeader(table2,
-    providingHeaders('Total Tosser Hours','Store Name'), 'Tossers Per Hour');
+    providingHeaders('Total Tosser Hours','Store Name'), 'Tossers Per Hour'
+  );
   renderTableBody(table2, stores, 'renderTossersAsRow');
+  renderTableFooter(table2, providingSumRow('tossersNeed', 'totalTossersNeeded', 'Sub Total People needed'));
 }
 
 function unloadElementWithId(elementId){
