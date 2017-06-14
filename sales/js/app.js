@@ -1,14 +1,12 @@
 'use strict';
 
-
-var locationsInfo = [
-['1st and Pike' , 23 , 65 ,6.3],
-['SeaTac Airport', 3 ,24 , 1.2],
-['Seattle Center', 11, 38 , 3.7],
-['Capitol Hill', 20,38 , 2.3],
-['Alki', 2 ,16 , 4.6],
-];
-
+var locationsInfo = [];
+// ['1st and Pike' , 23 , 65 ,6.3],
+// ['SeaTac Airport', 3 ,24 , 1.2],
+// ['Seattle Center', 11, 38 , 3.7],
+// ['Capitol Hill', 20,38 , 2.3],
+// ['Alki', 2 ,16 , 4.6],
+// ];
 
 function Store (name, minCustomer, maxCustomer, avgCookieSale) {
   this.name = name;
@@ -33,7 +31,9 @@ for(var ea in locationsInfo){
             )
   );
 }
-function renderTableHeader(parent, singleArray){
+function renderTableHeader(parent, singleArray, caption){
+  parent.appendChild(creatingElementNameWithContent('caption', caption));
+
   var thead = document.createElement('thead');
   var tr = document.createElement('tr');
   thead.appendChild(tr);
@@ -149,22 +149,25 @@ function renderTableBody(parent, bodyElements, subArrayName){
   }
 }
 
-// Cookies table
-processLocationStats();
-var parentMyElement = document.getElementById('mylistsOfStats');
-var table = document.createElement('table');
-parentMyElement.appendChild(table);
+function renderTables(){
+  // Cookies table
+  processLocationStats();
+  var parentMyElement = document.getElementById('mylistsOfStats');
+  var table = document.createElement('table');
+  parentMyElement.appendChild(table);
 
-renderTableHeader(table, providingHeaders('Daily Location Total','Store Name'));
-renderTableBody(table, stores, 'renderStatsAsRow');
-renderTableFooter(table, providingSumRow());
+  renderTableHeader(table,
+    providingHeaders('Daily Location Total','Store Name'), 'Cookie Sales');
+  renderTableBody(table, stores, 'renderStatsAsRow');
+  renderTableFooter(table, providingSumRow());
 
-// Tossers Table
+  // Tossers Table
+  processTossersNeed();
+  var table2 = document.createElement('table');
+  parentMyElement.appendChild(table2);
+  renderTableHeader(table2,
+    providingHeaders('Total Tosser Hours','Store Name'), 'Tossers Per Hour');
+  renderTableBody(table2, stores, 'renderTossersAsRow');
+}
 
-processTossersNeed();
-var table2 = document.createElement('table');
-parentMyElement.appendChild(table2);
-renderTableHeader(table2, providingHeaders('Total Tosser Hours','Store Name'));
-renderTableBody(table2, stores, 'renderTossersAsRow');
-
-//
+renderTables();
