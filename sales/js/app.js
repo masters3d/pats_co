@@ -33,25 +33,24 @@ for(var ea in locationsInfo){
             )
   );
 }
-function renderTableHeader(parent){
+function renderTableHeader(parent, singleArray){
   var thead = document.createElement('thead');
   var tr = document.createElement('tr');
   thead.appendChild(tr);
-  tr.appendChild(creatingElementNameWithContent('th', 'Store Name'));
-  for (var each in hours) {
-    tr.appendChild(creatingElementNameWithContent('th', hours[each]));
+  for (var each in singleArray) {
+    tr.appendChild(creatingElementNameWithContent('th', singleArray[each]));
   }
-  tr.appendChild(creatingElementNameWithContent('th', 'Daily Location Total'));
-
   parent.appendChild(thead);
 }
 
-function renderTableFooter(parent){
-  var tfoot = document.createElement('tfoot');
-  var tr = document.createElement('tr');
-  tfoot.appendChild(tr);
-  tr.appendChild(creatingElementNameWithContent('td', 'Total Sum'));
+function providingHeaders(){
+  var headers = hours.slice();
+  headers.push('Daily Location Total');
+  headers.unshift('Store Name');
+  return headers;
+}
 
+function providingSumRow() {
   var totals = [];
   var mainTotal = 0;
   for (var eachF in stores ) {
@@ -62,12 +61,19 @@ function renderTableFooter(parent){
       totals[each] += statsForStore[each];
     }
   }
-  for (var eachTotal in totals) {
-    tr.appendChild(creatingElementNameWithContent('td', totals[eachTotal]));
+  totals.unshift('Total Sum');;
+  totals.push(mainTotal);
+  return totals;
+}
+
+function renderTableFooter(parent, arrayToRender){
+  var tfoot = document.createElement('tfoot');
+  var tr = document.createElement('tr');
+  tfoot.appendChild(tr);
+
+  for (var eachTotal in arrayToRender) {
+    tr.appendChild(creatingElementNameWithContent('td', arrayToRender[eachTotal]));
   }
-
-  tr.appendChild(creatingElementNameWithContent('td', mainTotal));
-
   parent.appendChild(tfoot);
 }
 
@@ -93,27 +99,29 @@ function creatingElementNameWithContent(node, content){
   return nodeElement;
 }
 
-Store.prototype.renderStats = function(parentElement){
-  // appends Name
-  parentElement.appendChild(creatingElementNameWithContent('td', this.name));
-  // appends All Hours
-  for(var statKey in this.locationsStats){
-    parentElement.appendChild(creatingElementNameWithContent(
-        'td', this.locationsStats[statKey]
+function renderRow(parent, rowItems){
+  for(var statKey in rowItems){
+    parent.appendChild(creatingElementNameWithContent(
+        'td', rowItems[statKey]
       ));
   }
-  // appends the total sold per store
-  parentElement.appendChild(creatingElementNameWithContent('td', this.totalCookiesSold));
+}
+
+Store.prototype.renderStatsAsRow = function(){
+  var stats = this.locationsStats.slice();
+  stats.unshift(this.name);
+  stats.push(this.totalCookiesSold);
+  return stats;
 };
 
-function renderTableBody(parent){
+function renderTableBody(parent, bodyElements, subArrayName){
   var tbody = document.createElement('tbody');
   parent.appendChild(tbody);
-  for (var each = 0; each < stores.length; each += 1){
-    var eachStore = stores[each];
+  for (var each = 0; each < bodyElements.length; each += 1){
+    var eachStore = bodyElements[each];
     var row = document.createElement('tr');
     tbody.appendChild(row);
-    eachStore.renderStats(row);
+    renderRow(row, eachStore[subArrayName]());
   }
 }
 
@@ -121,6 +129,7 @@ processLocationStats();
 var parentMyElement = document.getElementById('mylistsOfStats');
 var table = document.createElement('table');
 parentMyElement.appendChild(table);
-renderTableHeader(table);
-renderTableBody(table);
-renderTableFooter(table);
+
+renderTableHeader(table, providingHeaders());
+renderTableBody(table, stores, 'renderStatsAsRow');
+renderTableFooter(table, providingSumRow());
