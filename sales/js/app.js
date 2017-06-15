@@ -77,12 +77,6 @@ function processTossersNeed(){
     });
 }
 
-function creatingElementNameWithContent(node, content){
-  var nodeElement = document.createElement(node);
-  nodeElement.textContent = content;
-  return nodeElement;
-}
-
 // add a head and tail to an array. concat(head, array, tail)
 function concatingAsNewArray(head, array, tail) {
   var newArray = array.slice();
@@ -118,70 +112,29 @@ function providingSumRow(nameOfArrayOnStore, nameOfSubTotalOnStore, titleOfTotal
   return concatingAsNewArray(titleOfTotalSum, totals, mainTotal);
 }
 
-function renderTableBody(parent, bodyElements, subArrayName){
-  var tbody = document.createElement('tbody');
-  parent.appendChild(tbody);
-  for (var each = 0; each < bodyElements.length; each += 1){
-    var eachStore = bodyElements[each];
-    var row = document.createElement('tr');
-    tbody.appendChild(row);
-    renderRow(row, eachStore[subArrayName]());
-  }
-}
-
-function renderTableHeader(parent, singleArray, caption){
-  parent.appendChild(creatingElementNameWithContent('caption', caption));
-
-  var thead = document.createElement('thead');
-  var tr = document.createElement('tr');
-  thead.appendChild(tr);
-  for (var each in singleArray) {
-    tr.appendChild(creatingElementNameWithContent('th', singleArray[each]));
-  }
-  parent.appendChild(thead);
-}
-
-function renderTableFooter(parent, arrayToRender){
-  var tfoot = document.createElement('tfoot');
-  var tr = document.createElement('tr');
-  tfoot.appendChild(tr);
-
-  for (var eachTotal in arrayToRender) {
-    tr.appendChild(creatingElementNameWithContent('td', arrayToRender[eachTotal]));
-  }
-  parent.appendChild(tfoot);
-}
-
-function renderRow(parent, rowItems){
-  for(var statKey in rowItems){
-    parent.appendChild(creatingElementNameWithContent(
-        'td', rowItems[statKey]
-      ));
-  }
-}
-
 function renderTables(){
+
   // Cookies table
   processCookiesSales();
   var parentMyElement = document.getElementById('mylistsOfStats');
   var table = document.createElement('table');
   parentMyElement.appendChild(table);
 
-  renderTableHeader(table,
+  TableRender.renderTableHeader(table,
     providingHeaders('Store Name', 'Daily Location Total'), 'Cookie Sales'
   );
-  renderTableBody(table, stores, 'renderCookiesSalesAsRow');
-  renderTableFooter(table, providingSumRow('cookiesSold', 'cookiesSoldTotal'));
+  TableRender.renderTableBody(table, stores, 'renderCookiesSalesAsRow');
+  TableRender.renderTableFooter(table, providingSumRow('cookiesSold', 'cookiesSoldTotal'));
 
   // Tossers Table
   processTossersNeed();
   var table2 = document.createElement('table');
   parentMyElement.appendChild(table2);
-  renderTableHeader(table2,
+  TableRender.renderTableHeader(table2,
     providingHeaders('Store Name', 'Total Tosser Hours'), 'Tossers Per Hour'
   );
-  renderTableBody(table2, stores, 'renderTossersNeedAsRow');
-  renderTableFooter(table2, providingSumRow('tossersNeed', 'tossersNeedTotal', 'Sub Total People needed'));
+  TableRender.renderTableBody(table2, stores, 'renderTossersNeedAsRow');
+  TableRender.renderTableFooter(table2, providingSumRow('tossersNeed', 'tossersNeedTotal', 'Sub Total People needed'));
 }
 
 function unloadElementWithId(elementId){
