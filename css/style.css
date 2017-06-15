@@ -2,3 +2,18 @@
   font-family: 'Helvetica', sans-serif;
   /*font-family: serif;*/
 }
+
+
+.one_of_12.column,
+.one_of_12.columns                    { width: 8.3333%; }
+.two_of_12.columns                    { width: 16.66%; }
+.three_of_12.columns                  { width: 24.98%;            }
+.four_of_12.columns                   { width: 33.33%; }
+.five_of_12.columns                   { width: 41.65%; }
+.six_of_12.columns                    { width: 49.99%;            }
+.seven_of_12.columns                  { width: 58.33%; }
+.eight_of_12.columns                  { width: 66.66%; }
+.nine_of_12.columns                   { width: 74.97%;          }
+.ten_of_12.columns                    { width: 91.66%; }
+.eleven_of_12.columns                 { width: 91.3333333333%; }
+.twelve_of_12.columns                 { width: 100%; margin-left: 0; }
