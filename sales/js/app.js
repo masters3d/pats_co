@@ -32,6 +32,7 @@ stores.containsStore = function(store) {
 };
 
 var hours = [ '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
+
 for(var ea in locationsInfo){
   stores.push(
     new Store(
@@ -57,8 +58,8 @@ function renderTableHeader(parent, singleArray, caption){
 
 function providingHeaders(first, last){
   var headers = hours.slice();
-  headers.push(first);
-  headers.unshift(last);
+  headers.push(last);
+  headers.unshift(first);
   return headers;
 }
 
@@ -168,7 +169,7 @@ function renderTables(){
   parentMyElement.appendChild(table);
 
   renderTableHeader(table,
-    providingHeaders('Daily Location Total','Store Name'), 'Cookie Sales'
+    providingHeaders('Store Name', 'Daily Location Total'), 'Cookie Sales'
   );
   renderTableBody(table, stores, 'renderCookiesSalesAsRow');
   renderTableFooter(table, providingSumRow('cookiesSold', 'cookiesSoldTotal'));
@@ -178,7 +179,7 @@ function renderTables(){
   var table2 = document.createElement('table');
   parentMyElement.appendChild(table2);
   renderTableHeader(table2,
-    providingHeaders('Total Tosser Hours','Store Name'), 'Tossers Per Hour'
+    providingHeaders('Store Name', 'Total Tosser Hours'), 'Tossers Per Hour'
   );
   renderTableBody(table2, stores, 'renderTossersNeedAsRow');
   renderTableFooter(table2, providingSumRow('tossersNeed', 'tossersNeedTotal', 'Sub Total People needed'));
@@ -199,8 +200,17 @@ function newStoreHandler (event) {
   var storeToAdd = new Store(val1, val2, val3, val4);
 
   if (stores.containsStore(storeToAdd)){
-    // Present Error
     alert('This store has already been included');
+    return;
+  }
+
+  if (val3 < val2) {
+    alert('Max customers needs to be bigger than Min Customer');
+    return;
+  }
+
+  if (val2 === 0 && val3 === 0 || val4 === 0) {
+    alert('A store must have a purpose. 0 cookies or 0 customers = No Store');
     return;
   }
   stores.push(storeToAdd);
@@ -208,5 +218,7 @@ function newStoreHandler (event) {
   renderTables();
 }
 
-var newStore = document.getElementById('newStoreForm');
-newStore.addEventListener('submit', newStoreHandler);
+var addNewStore = document.getElementById('newStoreForm');
+addNewStore.addEventListener('submit', newStoreHandler);
+
+//
