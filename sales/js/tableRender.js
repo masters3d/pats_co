@@ -6,14 +6,13 @@ TableRender.renderTableBody = renderTableBody;
 TableRender.renderTableHeader = renderTableHeader;
 TableRender.renderTableFooter = renderTableFooter;
 
-function renderTableBody(parent, bodyElements, subArrayName){
+function renderTableBody(parent, bodyRows){
   var tbody = document.createElement('tbody');
   parent.appendChild(tbody);
-  for (var each = 0; each < bodyElements.length; each += 1){
-    var eachStore = bodyElements[each];
+  for (var each = 0; each < bodyRows.length; each += 1){
     var row = document.createElement('tr');
     tbody.appendChild(row);
-    renderRow(row, eachStore[subArrayName]());
+    renderRow(row, bodyRows);
   }
 }
 

@@ -85,12 +85,19 @@ function concatingAsNewArray(head, array, tail) {
   return newArray;
 }
 
-Store.prototype.renderCookiesSalesAsRow = function(){
-  return concatingAsNewArray(this.name, this.cookiesSold, this.cookiesSoldTotal);
+function providingCompleteRows ( nameColPropetyName, arrayProperyName, lastColProperyName) {
+  var rowsToReturn = [];
+  for (var eachItem in stores){
+    rowsToReturn.push(concatingAsNewArray(eachItem[nameColPropetyName],eachItem[arrayProperyName], eachItem[lastColProperyName]));
+  }
+}
+
+Store.renderCookiesSalesAsRows = function(){
+  return providingCompleteRows('name', 'cookiesSold', 'cookiesSoldTotal');
 };
 
-Store.prototype.renderTossersNeedAsRow = function(){
-  return concatingAsNewArray(this.name, this.tossersNeed, this.tossersNeedTotal);
+Store.renderTossersNeedAsRows = function(){
+  return providingCompleteRows('name', 'tossersNeed', 'tossersNeedTotal');
 };
 
 function providingHeaders(first, last){
@@ -123,7 +130,7 @@ function renderTables(){
   TableRender.renderTableHeader(table,
     providingHeaders('Store Name', 'Daily Location Total'), 'Cookie Sales'
   );
-  TableRender.renderTableBody(table, stores, 'renderCookiesSalesAsRow');
+  TableRender.renderTableBody(table, Store.renderCookiesSalesAsRows);
   TableRender.renderTableFooter(table, providingSumRow('cookiesSold', 'cookiesSoldTotal'));
 
   // Tossers Table
@@ -133,7 +140,7 @@ function renderTables(){
   TableRender.renderTableHeader(table2,
     providingHeaders('Store Name', 'Total Tosser Hours'), 'Tossers Per Hour'
   );
-  TableRender.renderTableBody(table2, stores, 'renderTossersNeedAsRow');
+  TableRender.renderTableBody(table2, Store.renderTossersNeedAsRows());
   TableRender.renderTableFooter(table2, providingSumRow('tossersNeed', 'tossersNeedTotal', 'Sub Total People needed'));
 }
 
