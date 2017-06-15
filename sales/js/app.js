@@ -44,17 +44,58 @@ for(var ea in locationsInfo){
   );
 }
 
-function renderTableHeader(parent, singleArray, caption){
-  parent.appendChild(creatingElementNameWithContent('caption', caption));
-
-  var thead = document.createElement('thead');
-  var tr = document.createElement('tr');
-  thead.appendChild(tr);
-  for (var each in singleArray) {
-    tr.appendChild(creatingElementNameWithContent('th', singleArray[each]));
+// functionProcess(store, index)
+function processRandomArrayMember( nameOfArrayMember,functionProcess) {
+  for (var i = 0; i < stores.length; i += 1){
+    var locationsStats = [];
+    var store = stores[i];
+    var runingSubTotal = 0;
+    for (var j = 0; j < hours.length; j += 1){
+      var flooredNumber = functionProcess(store, j);
+      locationsStats.push(flooredNumber);
+      runingSubTotal += flooredNumber;
+    }
+    console.log(locationsStats);
+    store[nameOfArrayMember] = locationsStats;
+    store[nameOfArrayMember + 'Total'] = runingSubTotal;
   }
-  parent.appendChild(thead);
 }
+
+function processCookiesSales(){
+  processRandomArrayMember('cookiesSold',
+    function(store){ // we are ommiting index here
+      return Math.floor(store.avgCookieSale * store.customersPerHour());
+    });
+}
+
+function processTossersNeed(){
+  processRandomArrayMember('tossersNeed',
+    function(store, index){
+      var people = Math.ceil(store.cookiesSold[index] / 20);
+      people = people >= 2 ? people : 2;
+      return people;
+    });
+}
+
+function creatingElementNameWithContent(node, content){
+  var nodeElement = document.createElement(node);
+  nodeElement.textContent = content;
+  return nodeElement;
+}
+
+Store.prototype.renderCookiesSalesAsRow = function(){
+  var stats = this.cookiesSold.slice();
+  stats.unshift(this.name);
+  stats.push(this.cookiesSoldTotal);
+  return stats;
+};
+
+Store.prototype.renderTossersNeedAsRow = function(){
+  var stats = this.tossersNeed.slice();
+  stats.unshift(this.name);
+  stats.push(this.tossersNeedTotal);
+  return stats;
+};
 
 function providingHeaders(first, last){
   var headers = hours.slice();
@@ -80,6 +121,29 @@ function providingSumRow(nameOfArrayOnStore, nameOfSubTotalOnStore, titleOfTotal
   return totals;
 }
 
+function renderTableBody(parent, bodyElements, subArrayName){
+  var tbody = document.createElement('tbody');
+  parent.appendChild(tbody);
+  for (var each = 0; each < bodyElements.length; each += 1){
+    var eachStore = bodyElements[each];
+    var row = document.createElement('tr');
+    tbody.appendChild(row);
+    renderRow(row, eachStore[subArrayName]());
+  }
+}
+
+function renderTableHeader(parent, singleArray, caption){
+  parent.appendChild(creatingElementNameWithContent('caption', caption));
+
+  var thead = document.createElement('thead');
+  var tr = document.createElement('tr');
+  thead.appendChild(tr);
+  for (var each in singleArray) {
+    tr.appendChild(creatingElementNameWithContent('th', singleArray[each]));
+  }
+  parent.appendChild(thead);
+}
+
 function renderTableFooter(parent, arrayToRender){
   var tfoot = document.createElement('tfoot');
   var tr = document.createElement('tr');
@@ -90,74 +154,12 @@ function renderTableFooter(parent, arrayToRender){
   }
   parent.appendChild(tfoot);
 }
-// functionProcess(store, index)
-function processRandomArrayMember( nameOfArrayMember,functionProcess) {
-  for (var i = 0; i < stores.length; i += 1){
-    var locationsStats = [];
-    var store = stores[i];
-    var runingSubTotal = 0;
-    for (var j = 0; j < hours.length; j += 1){
-      var flooredNumber = functionProcess(store, j);
-      locationsStats.push(flooredNumber);
-      runingSubTotal += flooredNumber;
-    }
-    console.log(locationsStats);
-    store[nameOfArrayMember] = locationsStats;
-    store[nameOfArrayMember + 'Total'] = runingSubTotal;
-  }
-}
-
-function processCookiesSales(){
-  processRandomArrayMember('cookiesSold',
-    function(store){ // we are ommiting index here
-      return Math.floor(store.avgCookieSale * store.customersPerHour());
-    });
-}
-function processTossersNeed(){
-  processRandomArrayMember('tossersNeed',
-    function(store, index){
-      var people = Math.ceil(store.cookiesSold[index] / 20);
-      people = people >= 2 ? people : 2;
-      return people;
-    });
-}
-
-function creatingElementNameWithContent(node, content){
-  var nodeElement = document.createElement(node);
-  nodeElement.textContent = content;
-  return nodeElement;
-}
 
 function renderRow(parent, rowItems){
   for(var statKey in rowItems){
     parent.appendChild(creatingElementNameWithContent(
         'td', rowItems[statKey]
       ));
-  }
-}
-
-Store.prototype.renderCookiesSalesAsRow = function(){
-  var stats = this.cookiesSold.slice();
-  stats.unshift(this.name);
-  stats.push(this.cookiesSoldTotal);
-  return stats;
-};
-
-Store.prototype.renderTossersNeedAsRow = function(){
-  var stats = this.tossersNeed.slice();
-  stats.unshift(this.name);
-  stats.push(this.tossersNeedTotal);
-  return stats;
-};
-
-function renderTableBody(parent, bodyElements, subArrayName){
-  var tbody = document.createElement('tbody');
-  parent.appendChild(tbody);
-  for (var each = 0; each < bodyElements.length; each += 1){
-    var eachStore = bodyElements[each];
-    var row = document.createElement('tr');
-    tbody.appendChild(row);
-    renderRow(row, eachStore[subArrayName]());
   }
 }
 
@@ -191,7 +193,7 @@ function unloadElementWithId(elementId){
 }
 
 renderTables();
-function newStoreHandler (event) {
+function newStoreHandler(event) {
   event.preventDefault();
   var val1 = event.target.name.value;
   var val2 = parseFloat(event.target.minCustomer.value);
@@ -220,5 +222,3 @@ function newStoreHandler (event) {
 
 var addNewStore = document.getElementById('newStoreForm');
 addNewStore.addEventListener('submit', newStoreHandler);
-
-//
