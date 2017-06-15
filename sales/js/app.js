@@ -89,37 +89,36 @@ function renderTableFooter(parent, arrayToRender){
   }
   parent.appendChild(tfoot);
 }
-
-function processLocationStats(){
+// functionProcess(store, index)
+function processRandomArrayMember( nameOfArrayMember,functionProcess) {
   for (var i = 0; i < stores.length; i += 1){
     var locationsStats = [];
     var store = stores[i];
-    var totalCookiesSold = 0;
+    var runingSubTotal = 0;
     for (var j = 0; j < hours.length; j += 1){
-      var flooredNumber = Math.floor(store.avgCookieSale * store.customersPerHour());
+      var flooredNumber = functionProcess(store, j);
       locationsStats.push(flooredNumber);
-      totalCookiesSold += flooredNumber;
+      runingSubTotal += flooredNumber;
     }
     console.log(locationsStats);
-    store.locationsStats = locationsStats;
-    store.totalCookiesSold = totalCookiesSold;
+    store[nameOfArrayMember] = locationsStats;
+    store[nameOfArrayMember + 'Total'] = runingSubTotal;
   }
 }
 
+function processCookiesSales(){
+  processRandomArrayMember('cookiesSold',
+    function(store){ // we are ommiting index here
+      return Math.floor(store.avgCookieSale * store.customersPerHour());
+    });
+}
 function processTossersNeed(){
-  for (var i = 0; i < stores.length; i += 1){
-    var tossersNeed = [];
-    var store = stores[i];
-    var totalTossersNeeded = 0;
-    for (var j = 0; j < store.locationsStats.length; j += 1){
-      var flooredNumber = Math.ceil(store.locationsStats[j] / 20);
-      flooredNumber = flooredNumber >= 2 ? flooredNumber : 2 ;
-      tossersNeed.push(flooredNumber);
-      totalTossersNeeded += flooredNumber;
-    }
-    store.tossersNeed = tossersNeed;
-    store.totalTossersNeeded = totalTossersNeeded;
-  }
+  processRandomArrayMember('tossersNeed',
+    function(store, index){
+      var people = Math.ceil(store.cookiesSold[index] / 20);
+      people = people >= 2 ? people : 2;
+      return people;
+    });
 }
 
 function creatingElementNameWithContent(node, content){
@@ -136,17 +135,17 @@ function renderRow(parent, rowItems){
   }
 }
 
-Store.prototype.renderStatsAsRow = function(){
-  var stats = this.locationsStats.slice();
+Store.prototype.renderCookiesSalesAsRow = function(){
+  var stats = this.cookiesSold.slice();
   stats.unshift(this.name);
-  stats.push(this.totalCookiesSold);
+  stats.push(this.cookiesSoldTotal);
   return stats;
 };
 
-Store.prototype.renderTossersAsRow = function(){
+Store.prototype.renderTossersNeedAsRow = function(){
   var stats = this.tossersNeed.slice();
   stats.unshift(this.name);
-  stats.push(this.totalTossersNeeded);
+  stats.push(this.tossersNeedTotal);
   return stats;
 };
 
@@ -163,7 +162,7 @@ function renderTableBody(parent, bodyElements, subArrayName){
 
 function renderTables(){
   // Cookies table
-  processLocationStats();
+  processCookiesSales();
   var parentMyElement = document.getElementById('mylistsOfStats');
   var table = document.createElement('table');
   parentMyElement.appendChild(table);
@@ -171,8 +170,8 @@ function renderTables(){
   renderTableHeader(table,
     providingHeaders('Daily Location Total','Store Name'), 'Cookie Sales'
   );
-  renderTableBody(table, stores, 'renderStatsAsRow');
-  renderTableFooter(table, providingSumRow('locationsStats', 'totalCookiesSold'));
+  renderTableBody(table, stores, 'renderCookiesSalesAsRow');
+  renderTableFooter(table, providingSumRow('cookiesSold', 'cookiesSoldTotal'));
 
   // Tossers Table
   processTossersNeed();
@@ -181,8 +180,8 @@ function renderTables(){
   renderTableHeader(table2,
     providingHeaders('Total Tosser Hours','Store Name'), 'Tossers Per Hour'
   );
-  renderTableBody(table2, stores, 'renderTossersAsRow');
-  renderTableFooter(table2, providingSumRow('tossersNeed', 'totalTossersNeeded', 'Sub Total People needed'));
+  renderTableBody(table2, stores, 'renderTossersNeedAsRow');
+  renderTableFooter(table2, providingSumRow('tossersNeed', 'tossersNeedTotal', 'Sub Total People needed'));
 }
 
 function unloadElementWithId(elementId){
