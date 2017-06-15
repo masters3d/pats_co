@@ -83,25 +83,24 @@ function creatingElementNameWithContent(node, content){
   return nodeElement;
 }
 
+// add a head and tail to an array. concat(head, array, tail)
+function concatingAsNewArray(head, array, tail) {
+  var newArray = array.slice();
+  newArray.push(tail);
+  newArray.unshift(head);
+  return newArray;
+}
+
 Store.prototype.renderCookiesSalesAsRow = function(){
-  var stats = this.cookiesSold.slice();
-  stats.unshift(this.name);
-  stats.push(this.cookiesSoldTotal);
-  return stats;
+  return concatingAsNewArray(this.name, this.cookiesSold, this.cookiesSoldTotal);
 };
 
 Store.prototype.renderTossersNeedAsRow = function(){
-  var stats = this.tossersNeed.slice();
-  stats.unshift(this.name);
-  stats.push(this.tossersNeedTotal);
-  return stats;
+  return concatingAsNewArray(this.name, this.tossersNeed, this.tossersNeedTotal);
 };
 
 function providingHeaders(first, last){
-  var headers = hours.slice();
-  headers.push(last);
-  headers.unshift(first);
-  return headers;
+  return concatingAsNewArray(first, hours, last);
 }
 
 function providingSumRow(nameOfArrayOnStore, nameOfSubTotalOnStore, titleOfTotalSumIn) {
@@ -116,9 +115,7 @@ function providingSumRow(nameOfArrayOnStore, nameOfSubTotalOnStore, titleOfTotal
       totals[each] += statsForStore[each];
     }
   }
-  totals.unshift(titleOfTotalSum);
-  totals.push(mainTotal);
-  return totals;
+  return concatingAsNewArray(titleOfTotalSum, totals, mainTotal);
 }
 
 function renderTableBody(parent, bodyElements, subArrayName){
