@@ -3,8 +3,10 @@
   /*font-family: serif;*/
 }
 
+/*This is just for testing*/
 div {
   border: 1px solid red;
+  height: 300px;
 }
 
 .row {
@@ -23,8 +25,7 @@ div {
 
 .column,
 .columns * {
-  width: inherit;
-  height: inherit;
+  width: 100%;
 }
 
 .column,
@@ -34,7 +35,6 @@ div {
   position: relative;
   box-sizing: border-box; }
 
-.one12.column,
 .one12.columns                    { width: 8.333333333333333%; }
 .two12.columns                    { width: 16.666666666666666%; }
 .one4.columns,
@@ -50,4 +50,6 @@ div {
 .nine12.columns                   { width: 75%; }
 .ten12.columns                    { width: 83.33333333333333%; }
 .eleven12.columns                 { width: 91.66666666666666%; }
+.one.column,
+.one.columns,
 .twelve12.columns                 { width: 100%; margin-left: 0; }
