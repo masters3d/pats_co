@@ -4,10 +4,10 @@
 }
 
 /*This is just for testing*/
-div, main, nav {
+/*div, main, nav {
   border: 1px solid red;
   height: 300px;
-}
+}*/
 
 .row {
   box-sizing: border-box;
@@ -53,3 +53,34 @@ div, main, nav {
 .one.column,
 .one.columns,
 .twelve12.columns                 { width: 100%; margin-left: 0; }
+
+.social_ico,
+.social_link {
+  width:50%;
+  display: block;
+  float: left;
+}
+
+#chinookImg {
+  transform: scale(-1, 1);
+}
+
+/*header information*/
+
+header.row {
+  position: relative;
+  /*background-image:*/
+}
+
+#salmonHeader {
+  text-align: center;
+  font-size: 400%;
+}
+#salmonImg {
+  float: left;
+  width: 75%;
+}
+#catoonCookie {
+  width: 25%;
+
+}
