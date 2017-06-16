@@ -4,7 +4,7 @@
 }
 
 /*This is just for testing*/
-div {
+div, main, nav {
   border: 1px solid red;
   height: 300px;
 }
