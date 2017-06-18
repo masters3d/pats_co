@@ -1,15 +1,22 @@
 * {
   font-family: 'Helvetica', sans-serif;
   /*font-family: serif;*/
+
+
 }
 
 /*This is just for testing*/
-/*div, main, nav {
+/**{
   border: 1px solid red;
+}*/
+
+/*div, main, nav {
   height: 300px;
 }*/
 
+
 .row {
+  cursor: url('images/fish_icon.cur'), pointer;
   box-sizing: border-box;
 }
 
@@ -75,14 +82,19 @@ header.row {
 #salmonHeader {
   text-align: center;
   font-size: 400%;
+  animation: blinker 4s linear infinite;
 }
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
 #salmonImg {
   float: left;
   width: 75%;
+  cursor: alias, auto;
 }
 #catoonCookie {
   width: 25%;
-
 }
 
 /*https://gist.github.com/andyferra/2554919*/
